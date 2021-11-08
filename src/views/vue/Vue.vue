@@ -1,11 +1,11 @@
 <template>
-  <div class="home">
-    <h1>Home</h1>
+  <div class="vue-idx">
+    <h1>Vue</h1>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Home',
+  name: 'VueIndex',
 };
 </script>
