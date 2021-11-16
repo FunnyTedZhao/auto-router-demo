@@ -7,7 +7,7 @@ const Home = () => import('@/views/Home.vue');
 const VueView = () => import('@/views/vue/View.vue');
 const VueIndex = () => import('@/views/vue/Vue.vue');
 const Vuex = () => import('@/views/vue/Vuex.vue');
-const routerMap = {
+const routeMap = {
   VueView,
   Vue: VueIndex,
   Vuex,
@@ -29,26 +29,26 @@ const router = new VueRouter({
   routes,
 });
 
-const routerHandler = {
+const routeHandler = {
   addRoute(parentName, route) {
     const tRoute = route || parentName;
-    const tParentName = !route ? null : parentName;
+    const tParentName = route && parentName;
     if (tRoute.type === 'menu') {
       router.addRoute({
         path: tRoute.path,
         name: tRoute.name,
-        component: routerMap[tRoute.name],
+        component: routeMap[tRoute.name],
         children: [],
       });
-      routerHandler.handleRoutes(tRoute.name, tRoute.children);
+      routeHandler.handleRoutes(tRoute.name, tRoute.children);
     }
     if (tRoute.type === 'link') {
       router.addRoute(tParentName, {
         path: tRoute.path,
         name: tRoute.name,
-        component: routerMap[tRoute.name],
+        component: routeMap[tRoute.name],
         meta: {
-          authorities: routerHandler.handleAuthorities(tRoute.children),
+          authorities: routeHandler.handleAuthorities(tRoute.children),
         },
       });
     }
@@ -58,9 +58,9 @@ const routerHandler = {
   },
   handleRoutes(parentName, menus) {
     const tRoutes = menus || parentName;
-    const tParentName = !menus ? null : parentName;
-    if (!(tRoutes instanceof Array)) { return; }
-    tRoutes.forEach((route) => routerHandler.addRoute(tParentName, route));
+    const tParentName = menus && parentName;
+    if (!(tRoutes instanceof Array)) return;
+    tRoutes.forEach((route) => routeHandler.addRoute(tParentName, route));
   },
 };
 
@@ -69,7 +69,7 @@ router.beforeEach((to, from, next) => {
   if (!hasMenus) {
     DemoAPI.getRoutes().then((res) => {
       const { data: { menuList } } = res;
-      routerHandler.handleRoutes(menuList);
+      routeHandler.handleRoutes(menuList);
       store.commit('setMenus', menuList);
       next({ ...to, replace: true });
     });

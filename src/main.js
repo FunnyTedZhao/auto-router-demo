@@ -4,24 +4,9 @@ import router from './router';
 import store from './store';
 import './registerServiceWorker';
 import './plugins/iview';
+import './plugins/directive';
 
 Vue.config.productionTip = false;
-
-/* */
-Vue.directive('permission', {
-  inserted(el, binding) {
-    const {
-      history: {
-        current: {
-          meta: { authorities },
-        },
-      },
-    } = router;
-    const flag = binding.value;
-    if (!authorities.includes(flag)) el.parentNode.removeChild(el);
-  },
-});
-/* */
 
 new Vue({
   router,
