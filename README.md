@@ -44,7 +44,7 @@
 router.beforeEach((to, from, next) => {
     const { hasMenus } = store.getters; // 从vuex中获取菜单
     if (!hasMenus) {
-        /** 菜单不存在，调用接口 */
+        /* 菜单不存在，调用接口 */
         DemoAPI.getRoutes().then((res) => {
             const { data: { menuList } } = res;
             routeHandler.handleRoutes(menuList);    // 处理后端返回的数据
